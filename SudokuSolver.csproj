@@ -53,7 +53,7 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Solvers\HiddenPairs.cs" />
-    <Compile Include="Solvers\NakedPairs.cs" />
+    <Compile Include="Solvers\NakedSolver.cs" />
     <Compile Include="Solvers\Pair.cs" />
     <Compile Include="Sudoku.cs">
       <SubType>Form</SubType>

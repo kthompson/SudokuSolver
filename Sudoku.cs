@@ -137,8 +137,14 @@ namespace SudokuSolver
             _grid.Accept(new OptionRemover());
             _grid.Accept(new NakedSingle());
             _grid.Accept(new HiddenSingle());
-            _grid.Accept(new NakedPairs());
-            _grid.Accept(new HiddenPairs());
+            _grid.Accept(new NakedSolver(2));
+            //_grid.Accept(new HiddenPairs());
+            _grid.Accept(new NakedSolver(3));
+            _grid.Accept(new NakedSolver(4));
+            _grid.Accept(new NakedSolver(5));
+            _grid.Accept(new NakedSolver(6));
+            _grid.Accept(new NakedSolver(7));
+            _grid.Accept(new NakedSolver(8));
         }
     }
 }
