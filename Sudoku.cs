@@ -53,17 +53,6 @@ namespace SudokuSolver
             
         }
 
-        private TextBox GetTextBox(int x, int y)
-        {
-            var name = "txt" + x.ToString() + y.ToString();
-
-            var textBoxes = this.Controls.Find(name, false);
-            if (textBoxes.Length == 0)
-                return null;
-
-            return textBoxes[0] as TextBox;
-        }
-
         private void OnCellValueChanged(object sender, EventArgs e)
         {
             var cell = sender as Cell;
@@ -101,7 +90,7 @@ namespace SudokuSolver
             var bx = x/3;
             var by = y/3;
             var textBox = new TextBox();
-
+            textBox.Click += new EventHandler(textBox_Click);
             textBox.ForeColor = Color.Green;
             textBox.Location = new Point(12 + (w + pad) * x + bx * pad * 2,
                                          12 + (h + pad) * y + by * pad * 2);
@@ -116,6 +105,16 @@ namespace SudokuSolver
             this._textBoxes.Add(new Point(x, y), textBox);
 
             this.Controls.Add(textBox);
+        }
+
+        private void textBox_Click(object sender, EventArgs e)
+        {
+            var tb = sender as TextBox;
+            if (tb == null)
+                return;
+
+            var index = (int)tb.Tag;
+            toolTip1.SetToolTip(tb, string.Join(string.Empty, _grid.Cells[index].Options.Select(o => o.ToString()).ToArray()));
         }
 
         private void textBox_TextChanged(object sender, EventArgs e)

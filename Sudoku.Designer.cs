@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnSolve = new System.Windows.Forms.Button();
             this.chkEntryMode = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // btnSolve
@@ -45,6 +47,8 @@
             // chkEntryMode
             // 
             this.chkEntryMode.AutoSize = true;
+            this.chkEntryMode.Checked = true;
+            this.chkEntryMode.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkEntryMode.Location = new System.Drawing.Point(487, 41);
             this.chkEntryMode.Name = "chkEntryMode";
             this.chkEntryMode.Size = new System.Drawing.Size(84, 17);
@@ -70,6 +74,7 @@
 
         private System.Windows.Forms.Button btnSolve;
         private System.Windows.Forms.CheckBox chkEntryMode;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
