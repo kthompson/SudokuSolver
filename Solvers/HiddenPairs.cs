@@ -7,48 +7,71 @@ namespace SudokuSolver.Solvers
 {
     public class HiddenPairs : BaseSolver
     {
-        private Dictionary<Pair, int> _pairCounts = new Dictionary<Pair, int>();
+        private Dictionary<int, int> _optionCounts = new Dictionary<int, int>();
+
+        public int Count { get; private set; }
+
+        public HiddenPairs()
+        {
+            this.Count = 2;
+        }
 
         public override void Visit(Region region)
         {
-            _pairCounts.Clear();
-            region.ForEach(AddPair);
+            _optionCounts.Clear();
+            region.ForEach(AddOptions);
 
-            var pairs = from kv in _pairCounts
-                        where kv.Value == 2
-                        select kv.Key;
+            var options = _optionCounts.Where(kv => kv.Value <= this.Count).Select(kv => kv.Key).ToList();
 
-            foreach (var pair in pairs)
+            if (options.Count < this.Count)
+                return;
+            //get two options
+            foreach (var combo in GetCombinations(this.Count, options.Count))
             {
-                foreach (var cell in region)
+                var comboOptions = combo.Select(index => options[index]).ToList();
+                foreach (var cellSet in GetCombinations(region, this.Count))
                 {
-                    var options = cell.Options;
-                    if (options.Count == 0) continue;
-                    if (options.Contains(pair.Option1) && options.Contains(pair.Option2)) continue;
+                    if (cellSet.Any(cell => cell.HasValue))
+                        continue;
 
-                    options.Clear();
-                    options.Add(pair.Option1);
-                    options.Add(pair.Option2);
+                    if (comboOptions.All(option => cellSet.All(cell => cell.Options.Contains(option))))
+                    {
+                        /* cellset is good
+                         * clear each cell of its options and then
+                         * all the combo's options
+                         */
+                        foreach (var cell in cellSet)
+                        {
+                            for (var i = 0; i < cell.Options.Count; i++)
+                            {
+                                if (!comboOptions.Contains(cell.Options[i]))
+                                {
+                                    cell.Options.RemoveAt(i);
+                                    i--;
+                                }
+                            }
+                        }
+                    }
                 }
+            }
+
+            
+        }
+
+        private void AddOptions(Cell cell)
+        {
+            if (cell.HasValue)
+                return;
+
+            foreach (var option in cell.Options)
+            {
+                if (_optionCounts.ContainsKey(option))
+                    _optionCounts[option]++;
+                else
+                    _optionCounts.Add(option, 1);
             }
         }
 
-        private void AddPair(Cell cell)
-        {
-            if (cell.Options.Count < 2)
-                return;
-
-            for (var i = 0; i < cell.Options.Count - 1; i++)
-                for (var j = i + 1; j < cell.Options.Count; j++)
-                    AddPair(new Pair(cell.Options[i], cell.Options[j]));
-        }
-
-        private void AddPair(Pair pair)
-        {
-            if (_pairCounts.ContainsKey(pair))
-                _pairCounts[pair]++;
-            else
-                _pairCounts.Add(pair, 1);
-        }
+    
     }
 }

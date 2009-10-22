@@ -35,7 +35,15 @@ namespace SudokuSolver.Solvers
 
         #endregion
 
-        public IEnumerable<Cell[]> GetCombinations(Region region, int indexCount)
+        public IEnumerable<List<Cell>> GetCombinations(Region region, int indexCount)
+        {
+            foreach(var group in GetCombinations(indexCount, 9))
+            {
+                yield return group.Select(index => region[index]).ToList();
+            }
+        }
+
+        public IEnumerable<List<int>> GetCombinations(int indexCount, int maxCount)
         {
             var indices = new List<int>();
             for (int i = 0; i < indexCount; i++)
@@ -43,18 +51,23 @@ namespace SudokuSolver.Solvers
 
             while (true)
             {
-                yield return indices.Select(index => region[index]).ToArray();
-                if (!Increment(indices)) break;
+                yield return indices.ToList();
+                if (!Increment(indices, maxCount)) break;
             }
         }
 
         private bool Increment(List<int> indices)
         {
+            return Increment(indices, 9);
+        }
+
+        private bool Increment(List<int> indices, int maxValue)
+        {
             var i = indices.Count - 1;
             var inc = false;
             while (i >= 0)
             {
-                if (indices[i] == 9 - indices.Count + i)
+                if (indices[i] == maxValue - indices.Count + i)
                 {
                     i--;
                     inc = true;
