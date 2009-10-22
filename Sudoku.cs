@@ -14,12 +14,11 @@ namespace SudokuSolver
     {
         private Grid _grid;
 
-        private Dictionary<Point, TextBox> _textBoxes;
+        private Dictionary<string, TextBox> _textBoxes = new Dictionary<string, TextBox>();
 
         public Sudoku()
         {
             InitializeComponent();
-            _textBoxes = new Dictionary<Point, TextBox>();
 
             var temp = "120 600 040\n" +
                        "700 000 009\n" +
@@ -58,7 +57,7 @@ namespace SudokuSolver
             if (cell == null)
                 return;
 
-            var pos = cell.Position;
+            var pos = cell.Id;
             var tb = _textBoxes[pos];
 
             if (tb.Text != string.Empty)
@@ -73,12 +72,16 @@ namespace SudokuSolver
             if (cell == null)
                 return;
 
-            var pos = cell.Position;
+            var pos = cell.Id;
             var tb = _textBoxes[pos];
 
             if (cell.IsLocked)
                 tb.ForeColor = Color.Black;
         }
+
+        static readonly char[] rowIds = new[] { 'A', 'B', 'C', 
+                                             'D', 'E', 'F',
+                                             'G', 'H', 'I'};
 
         private void CreateTextBox(int x, int y)
         {
@@ -101,7 +104,7 @@ namespace SudokuSolver
             textBox.TextAlign = HorizontalAlignment.Center;
             textBox.TextChanged += textBox_TextChanged;
 
-            this._textBoxes.Add(new Point(x, y), textBox);
+            this._textBoxes.Add(rowIds[x].ToString() + (y+1).ToString(), textBox);
 
             this.Controls.Add(textBox);
         }
@@ -113,7 +116,7 @@ namespace SudokuSolver
                 return;
 
             var index = (int)tb.Tag;
-            toolTip1.SetToolTip(tb, string.Join(string.Empty, _grid.Cells[index].Options.Select(o => o.ToString()).ToArray()));
+            toolTip1.SetToolTip(tb, _grid.Cells[index].ToString());
         }
 
         private void textBox_TextChanged(object sender, EventArgs e)

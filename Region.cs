@@ -7,10 +7,10 @@ namespace SudokuSolver
 {
     public class Region : List<Cell>
     {
-        public int Id { get; private set; }
+        public string Id { get; private set; }
         public RegionType Type { get; private set; }
 
-        public Region(int id, RegionType type)
+        public Region(string id, RegionType type)
         {
             this.Id = id;
             this.Type = type;
@@ -18,7 +18,20 @@ namespace SudokuSolver
 
         public override string ToString()
         {
-            return this.Type.ToString() + this.Id;
+            return this.Type + this.Id;
+        }
+    }
+
+    public class Block : Region
+    {
+        public Block()
+            : base(string.Empty, RegionType.Block)
+        {
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[{0}]", this[0].ToString());
         }
     }
 

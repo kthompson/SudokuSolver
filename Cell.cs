@@ -8,6 +8,14 @@ namespace SudokuSolver
 {
     public class Cell
     {
+        public string Id
+        {
+            get
+            {
+                return string.Format("{0}{1}", this.Row.Id, this.Column.Id);
+            }
+        }
+
         public Cell(Region block, Region row, Region column, int value)
         {
             this.Block = block;
@@ -43,13 +51,13 @@ namespace SudokuSolver
             get { return _value != 0; }
         }
 
-        public Point Position
-        {
-            get
-            {
-                return new Point(this.Row.Id - 1, this.Column.Id - 1);
-            }
-        }
+        //public Point Position
+        //{
+        //    get
+        //    {
+        //        return new Point(this.Row.Id - 1, this.Column.Id - 1);
+        //    }
+        //}
 
         public event EventHandler ValueChanged;
         private void OnValueChanged()
@@ -87,7 +95,10 @@ namespace SudokuSolver
 
         public override string ToString()
         {
-            return string.Format("[{0}, {1}, {2}]: {3}", this.Row.Id, this.Column.Id, this.Block.Id, this.Value);
+            if(this.HasValue)
+                return string.Format("{0}: {1}", this.Id, this.Value);
+
+            return string.Format("{0}: {1}", this.Id, string.Join(string.Empty, this.Options.Select(o => o.ToString()).ToArray()));
         }
     }
 }
