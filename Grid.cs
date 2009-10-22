@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SudokuSolver.Solvers;
+using System.Text.RegularExpressions;
 
 namespace SudokuSolver
 {
@@ -46,6 +47,23 @@ namespace SudokuSolver
                     Cells.Add(cell);
                 }
             }
+        }
+
+        public void Apply(string grid)
+        {
+            var regex = new Regex("[^\\d]", RegexOptions.Compiled);
+            var matrix = new int[9][];
+            var lines = grid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int x = 0; x < 9; x++)
+            {
+                matrix[x] = new int[9];
+                var line = regex.Replace(lines[x], string.Empty);
+                for (int y = 0; y < 9; y++)
+                {
+                    matrix[x][y] = int.Parse(line[y].ToString());
+                }
+            }
+            this.Apply(matrix);
         }
 
         public void Apply(int[][] grid)

@@ -21,21 +21,17 @@ namespace SudokuSolver
             InitializeComponent();
             _textBoxes = new Dictionary<Point, TextBox>();
 
-            //var test = new[]
-            //               {
-            //                   new[]{1,5,0, 0,0,9, 3,0,0},
-            //                   new[]{6,3,0, 0,0,0, 5,0,1},
-            //                   new[]{7,0,0, 0,1,0, 0,6,0},
+            var temp = "120 600 040\n" +
+                       "700 000 009\n" +
+                       "000 008 600\n" +
 
-            //                   new[]{9,7,0, 0,0,6, 0,0,0},
-            //                   new[]{0,0,4, 0,0,0, 2,0,0},
-            //                   new[]{0,0,0, 1,0,0, 0,3,9},
+                       "000 030 050\n" +
+                       "005 186 300\n" +
+                       "010 020 000\n" +
 
-            //                   new[]{0,2,0, 0,4,0, 0,0,6},
-            //                   new[]{8,0,7, 0,0,0, 0,5,3},
-            //                   new[]{0,0,6, 9,0,0, 0,8,2},
-
-            //               };
+                       "007 500 000\n" +
+                       "500 000 004\n" +
+                       "030 004 087\n";
 
             _grid = new Grid();
 
@@ -49,9 +45,12 @@ namespace SudokuSolver
                 for (int y = 0; y < 9; y++)
                     CreateTextBox(x, y);
 
-            //_grid.Apply(test);
+            this.chkEntryMode.Checked = false;
+            _grid.Apply(temp);
             
         }
+
+
 
         private void OnCellValueChanged(object sender, EventArgs e)
         {
