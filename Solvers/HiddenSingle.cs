@@ -36,18 +36,16 @@ namespace SudokuSolver.Solvers
                     CountValue(i);
             }
 
-            foreach (var value in Values)
-                if (value.Value == 1)
-                    this.HiddenSingles.Add(value.Key);
+            foreach (var value in Values.Where(value => value.Value == 1))
+                this.HiddenSingles.Add(value.Key);
 
             base.Visit(region);
         }
 
         public override void Visit(Cell cell)
         {
-            foreach (var single in HiddenSingles)
-                if (cell.Options.Contains(single))
-                    cell.Value = single;
+            foreach (var single in HiddenSingles.Where(single => cell.Options.Contains(single)))
+                cell.Value = single;
         }
 
         private void CountValue(int i)

@@ -23,10 +23,10 @@ namespace SudokuSolver
 
             this.Cells = new List<Cell>();
 
-            for (char i = 'A'; i < 'J'; i++)
+            for (var i = 'A'; i < 'J'; i++)
                 this.Rows.Add(new Region(i.ToString(), RegionType.Row));
             
-            for (int i = 1; i < 10; i++)
+            for (var i = 1; i < 10; i++)
                 this.Columns.Add(new Region(i.ToString(), RegionType.Column));
 
             9.Times(() => this.Blocks.Add(new Block()));

@@ -14,7 +14,7 @@ namespace SudokuSolver
     {
         private Grid _grid;
 
-        private Dictionary<string, TextBox> _textBoxes = new Dictionary<string, TextBox>();
+        private readonly Dictionary<string, TextBox> _textBoxes = new Dictionary<string, TextBox>();
 
         public Sudoku()
         {
@@ -32,6 +32,19 @@ namespace SudokuSolver
                        "500 000 004\n" +
                        "030 004 087\n";
 
+
+            temp = "573 006 019\n" +
+                   "002 010 306\n" +
+                   "100 000 000\n" +
+
+                   "000 967 050\n" +
+                   "200 030 007\n" +
+                   "060 524 000\n" +
+
+                   "000 000 001\n" +
+                   "708 040 600\n" +
+                   "630 800 742\n";
+
             _grid = new Grid();
 
             foreach (var cell in _grid.Cells)
@@ -40,8 +53,8 @@ namespace SudokuSolver
                 cell.Locked += OnCellLocked;
             }
 
-            for (int x = 0; x < 9; x++)
-                for (int y = 0; y < 9; y++)
+            for (var x = 0; x < 9; x++)
+                for (var y = 0; y < 9; y++)
                     CreateTextBox(x, y);
 
             this.chkEntryMode.Checked = false;
@@ -92,7 +105,7 @@ namespace SudokuSolver
             var bx = x/3;
             var by = y/3;
             var textBox = new TextBox();
-            textBox.Click += new EventHandler(textBox_Click);
+            textBox.Click += textBox_Click;
             textBox.ForeColor = Color.Green;
             textBox.Location = new Point(12 + (w + pad) * x + bx * pad * 2,
                                          12 + (h + pad) * y + by * pad * 2);
@@ -104,7 +117,7 @@ namespace SudokuSolver
             textBox.TextAlign = HorizontalAlignment.Center;
             textBox.TextChanged += textBox_TextChanged;
 
-            this._textBoxes.Add(rowIds[x].ToString() + (y+1).ToString(), textBox);
+            this._textBoxes.Add(rowIds[x] + (y+1).ToString(), textBox);
 
             this.Controls.Add(textBox);
         }

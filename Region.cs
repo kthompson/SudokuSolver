@@ -21,24 +21,4 @@ namespace SudokuSolver
             return this.Type + this.Id;
         }
     }
-
-    public class Block : Region
-    {
-        public Block()
-            : base(string.Empty, RegionType.Block)
-        {
-        }
-
-        public override string ToString()
-        {
-            return string.Format("[{0}]", this[0].ToString());
-        }
-    }
-
-    public enum RegionType
-    {
-        Block, 
-        Column,
-        Row
-    }
 }

@@ -33,18 +33,16 @@ namespace SudokuSolver.Solvers
         {
             this.Values.Clear();
 
-            foreach (var cell in region)
-                if (cell.HasValue && !this.Values.Contains(cell.Value))
-                    this.Values.Add(cell.Value);
+            foreach (var cell in region.Where(cell => cell.HasValue && !this.Values.Contains(cell.Value)))
+                this.Values.Add(cell.Value);
 
             base.Visit(region);
         }
 
         public override void Visit(Cell cell)
         {
-            foreach (var value in Values)
-                if(cell.Options.Remove(value))
-                    this.OptionsRemoved++;
+            foreach (var value in Values.Where(value => cell.Options.Remove(value)))
+                this.OptionsRemoved++;
         }
     }
 }

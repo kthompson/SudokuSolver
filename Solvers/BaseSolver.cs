@@ -37,31 +37,28 @@ namespace SudokuSolver.Solvers
 
         public IEnumerable<List<Cell>> GetCombinations(Region region, int indexCount)
         {
-            foreach(var group in GetCombinations(indexCount, 9))
-            {
-                yield return group.Select(index => region[index]).ToList();
-            }
+            return GetCombinations(indexCount, 9)
+                .Select(@group => @group
+                    .Select(index => region[index])
+                    .ToList());
         }
 
         public IEnumerable<List<int>> GetCombinations(int indexCount, int maxCount)
         {
             var indices = new List<int>();
-            for (int i = 0; i < indexCount; i++)
+            for (var i = 0; i < indexCount; i++)
                 indices.Add(i);
 
             while (true)
             {
                 yield return indices.ToList();
-                if (!Increment(indices, maxCount)) break;
+
+                if (!Increment(indices, maxCount)) 
+                    break;
             }
         }
 
-        private bool Increment(List<int> indices)
-        {
-            return Increment(indices, 9);
-        }
-
-        private bool Increment(List<int> indices, int maxValue)
+        private bool Increment(IList<int> indices, int maxValue = 9)
         {
             var i = indices.Count - 1;
             var inc = false;
@@ -75,14 +72,15 @@ namespace SudokuSolver.Solvers
                 else
                 {
                     indices[i]++;
-                    if (inc == true)
+                    
+                    if (!inc) 
+                        return true;
+
+                    for (var j = i + 1; j < indices.Count; j++)
                     {
-                        inc = false;
-                        for (int j = i + 1; j < indices.Count; j++)
-                        {
-                            indices[j] = indices[j - 1] + 1;
-                        }
+                        indices[j] = indices[j - 1] + 1;
                     }
+                    
                     return true;
                 }
             }

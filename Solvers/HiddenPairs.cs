@@ -7,7 +7,7 @@ namespace SudokuSolver.Solvers
 {
     public class HiddenPairs : BaseSolver
     {
-        private Dictionary<int, int> _optionCounts = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _optionCounts = new Dictionary<int, int>();
 
         public int Count { get; private set; }
 
@@ -29,33 +29,27 @@ namespace SudokuSolver.Solvers
             foreach (var combo in GetCombinations(this.Count, options.Count))
             {
                 var comboOptions = combo.Select(index => options[index]).ToList();
-                foreach (var cellSet in GetCombinations(region, this.Count))
+                foreach (var cell in GetUnsolvedCellsFromCellSets(region, comboOptions))
                 {
-                    if (cellSet.Any(cell => cell.HasValue))
-                        continue;
-
-                    if (comboOptions.All(option => cellSet.All(cell => cell.Options.Contains(option))))
+                    for (var i = 0; i < cell.Options.Count; i++)
                     {
-                        /* cellset is good
-                         * clear each cell of its options and then
-                         * all the combo's options
-                         */
-                        foreach (var cell in cellSet)
-                        {
-                            for (var i = 0; i < cell.Options.Count; i++)
-                            {
-                                if (!comboOptions.Contains(cell.Options[i]))
-                                {
-                                    cell.Options.RemoveAt(i);
-                                    i--;
-                                }
-                            }
-                        }
+                        if (comboOptions.Contains(cell.Options[i])) 
+                            continue;
+
+                        cell.Options.RemoveAt(i);
+                        i--;
                     }
                 }
             }
+        }
 
-            
+        private IEnumerable<Cell> GetUnsolvedCellsFromCellSets(Region region, List<int> comboOptions)
+        {
+            return from cellSet in GetCombinations(region, this.Count)
+                   where !cellSet.Any(cell => cell.HasValue)
+                   where comboOptions.All(option => cellSet.All(cell => cell.Options.Contains(option)))
+                   from cell in cellSet 
+                   select cell;
         }
 
         private void AddOptions(Cell cell)
@@ -71,7 +65,5 @@ namespace SudokuSolver.Solvers
                     _optionCounts.Add(option, 1);
             }
         }
-
-    
     }
 }
